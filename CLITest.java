@@ -19,7 +19,7 @@ class CLITest {
 
     @AfterEach
     void tearDown() {
-        // Clean up files and directories after each test
+        // Clean up
         deleteTestFile("testFile.txt");
         deleteTestFile("testOutput.txt");
         deleteTestFile("inputTestFile.txt");
@@ -130,7 +130,7 @@ class CLITest {
         String fileContent = Files.readString(Paths.get(inputFileName));
 
         assertEquals(expectedContent, fileContent);
-        System.setIn(System.in); // Reset standard input
+        System.setIn(System.in);
     }
 
     @Test
