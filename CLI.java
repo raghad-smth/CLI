@@ -41,11 +41,11 @@ public class CLI {
                 }
 
                 if (!deleteFile(file, recursive)) {
-                    return "Error! Failed to delete " + args[i];
+                    return "Error: Failed to delete " + args[i];
                 }
             }
         }
-        return "Success! Files and/or directories deleted.";
+        return "Success: Files and/or directories deleted.";
     }
 
     // Helper method to delete file or directory recursively
@@ -66,9 +66,9 @@ public class CLI {
         File file = new File(fileName);
         try (FileWriter writer = new FileWriter(file)) {
             writer.write(command);
-            return "Success!" + fileName;
+            return "Success: Output redirected to " + fileName;
         } catch (IOException e) {
-            return "Error! unable to write to file " + fileName + ": " + e.getMessage();
+            return "Error: Unable to write to file " + fileName + ": " + e.getMessage();
         }
     }
 
@@ -88,7 +88,7 @@ public class CLI {
             }
             return "Success: Input saved to " + fileName;
         } catch (IOException e) {
-            return "Error: unable to write to file " + fileName + ": " + e.getMessage();
+            return "Error: Unable to write to file " + fileName + ": " + e.getMessage();
         }
     }
 
@@ -99,12 +99,12 @@ public class CLI {
             writer.write(command + System.lineSeparator());
             return "Success!" + fileName;
         } catch (IOException e) {
-            return "Error! unable to write to file " + fileName + ": " + e.getMessage();
+            return "Error! Unable to write to file " + fileName + ": " + e.getMessage();
         }
     }
 
     public static void main(String[] args) {
-        String commandLine = "Hello world"; // Example command for Windows
+        String commandLine = "Hello world!"; // Example command for Windows
         executePipedCommands(commandLine);
     }
 //"pip" method
