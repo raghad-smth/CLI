@@ -5,35 +5,33 @@ public class Shell {
     private CLI cli;
 
     public Shell() {
-        cli = new CLI(); // Initialize your CLI class
+        cli = new CLI(); 
     }
 
     public void start() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Welcome to the Simple Shell! Type 'exit' to quit.");
+        System.out.println("Welcome to the Simple Shell! type 'exit' to quit.");
 
         while (true) {
-            System.out.print("shell> "); // Prompt for input
+            System.out.print("shell> "); 
             String input = scanner.nextLine();
 
             if (input.equalsIgnoreCase("exit")) {
-                System.out.println("Exiting the shell.");
-                break; // Exit the loop if user types 'exit'
+                System.out.println("Exiting the shell . . Goodbye!");
+                break; 
             }
 
             // Process the command
-            String[] commands = input.split("\\|"); // Handle pipes
+            String[] commands = input.split("\\|"); 
             for (String command : commands) {
                 command = command.trim(); // Trim whitespace
-
-                // Here you can add conditions to handle specific commands
+                
                 if (command.startsWith("rm ")) {
                     // Extract arguments and call rm method
                     String[] args = command.split(" ");
                     String result = cli.rm(args);
                     System.out.println(result);
                 } else if (command.startsWith("cat ")) {
-                    // Handle the cat command
                     String[] args = command.split(" ");
                     if (args.length < 2) {
                         System.out.println("Usage: cat <file>");
@@ -71,6 +69,6 @@ public class Shell {
 
     public static void main(String[] args) {
         Shell shell = new Shell();
-        shell.start(); // Start the shell
+        shell.start(); 
     }
 }
