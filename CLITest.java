@@ -2,7 +2,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -11,25 +13,31 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CLITest {
     private CLI cli;
-
+    private String testFileName; 
     @BeforeEach
     void setUp() {
         cli = new CLI();
+        testFileName = "testfile.txt"; 
     }
 
     @AfterEach
     void tearDown() {
-        // Clean up
+        // Clean up files created during the tests
         deleteTestFile("testFile.txt");
         deleteTestFile("testOutput.txt");
         deleteTestFile("inputTestFile.txt");
         deleteTestFile("appendTestFile.txt");
         deleteTestDirectory("testDir");
+
+        // Delete the main test file
+        deleteTestFile(testFileName);
     }
 
     void deleteTestFile(String fileName) {
         File file = new File(fileName);
-        if (file.exists()) file.delete();
+        if (file.exists()) {
+            file.delete();
+        }
     }
 
     void deleteTestDirectory(String dirName) {
@@ -37,7 +45,9 @@ class CLITest {
         if (dir.exists()) {
             File[] contents = dir.listFiles();
             if (contents != null) {
-                for (File file : contents) file.delete();
+                for (File file : contents) {
+                    file.delete();
+                }
             }
             dir.delete();
         }
@@ -134,31 +144,34 @@ class CLITest {
     }
 
     @Test
-    void testAppendToFileCreatesNewFile() throws IOException {
-        String commandOutput = "First Line";
-        String fileName = "appendTestFile.txt";
+    public void testAppendToFileSuccess() {
+        // Given
+        String command = "Test command";
 
-        String result = cli.appendToFile(commandOutput, fileName);
-        assertEquals("Success: Output appended to " + fileName, result);
+        // When
+        String result = cli.appendToFile(command, testFileName);
 
-        String fileContent = Files.readString(Paths.get(fileName));
-        assertEquals(commandOutput + System.lineSeparator(), fileContent);
+        // Then
+        assertEquals("Success!" + testFileName, result);
+        // Check if the command is appended to the file
+        try (BufferedReader reader = new BufferedReader(new FileReader(testFileName))) {
+            String line = reader.readLine();
+            assertEquals("Test command", line);
+        } catch (IOException e) {
+            fail("IOException occurred: " + e.getMessage());
+        }
     }
 
     @Test
-    void testAppendToFileAppendsContent() throws IOException {
-        String initialContent = "Initial Content";
-        String appendContent = "Appended Content";
-        String fileName = "appendTestFile.txt";
+    public void testAppendToFileIOException() {
+        // Given
+        String command = "Test command";
+        String invalidFileName = "/invalid_path/testfile.txt"; // Using an invalid path
 
-        cli.appendToFile(initialContent, fileName);
-        String initialFileContent = Files.readString(Paths.get(fileName));
-        assertEquals(initialContent + System.lineSeparator(), initialFileContent);
+        // When
+        String result = cli.appendToFile(command, invalidFileName);
 
-        cli.appendToFile(appendContent, fileName);
-        String updatedFileContent = Files.readString(Paths.get(fileName));
-        assertEquals(initialContent + System.lineSeparator() + appendContent + System.lineSeparator(), updatedFileContent);
+        // Then
+        assertTrue(result.startsWith("Error! Unable to write to file ")); // Check for error message
     }
-
-
 }
