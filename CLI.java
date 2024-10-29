@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CLI {
-    // Method to execute the rm command
+    // rm method
     public String rm(String[] args) {
         if (args.length == 0) {
             return "Usage: rm [-r] <file/directory>";
@@ -19,7 +19,7 @@ public class CLI {
             startIndex = 1;
         }
 
-        try (Scanner scanner = new Scanner(System.in)) { // Close scanner after use
+        try (Scanner scanner = new Scanner(System.in)) {
             for (int i = startIndex; i < args.length; i++) {
                 File file = new File(args[i]);
 
@@ -32,7 +32,6 @@ public class CLI {
                     return "Error: " + args[i] + " is a directory. Use -r to remove directories.";
                 }
 
-                // Check if file is writable
                 if (!file.canWrite()) {
                     System.out.println("File " + args[i] + " is unwritable. Confirm deletion (y/n): ");
                     String response = scanner.nextLine();
@@ -41,13 +40,12 @@ public class CLI {
                     }
                 }
 
-                // Remove file or directory
                 if (!deleteFile(file, recursive)) {
-                    return "Error: Failed to delete " + args[i];
+                    return "Error! Failed to delete " + args[i];
                 }
             }
         }
-        return "Success: Files and/or directories deleted.";
+        return "Success! Files and/or directories deleted.";
     }
 
     // Helper method to delete file or directory recursively
@@ -63,18 +61,18 @@ public class CLI {
         return file.delete();
     }
 
-    // Method to execute the redirection command ">"
+    // ">" method
     public String redirectTo(String command, String fileName) {
         File file = new File(fileName);
         try (FileWriter writer = new FileWriter(file)) {
             writer.write(command);
-            return "Success: Output redirected to " + fileName;
+            return "Success!" + fileName;
         } catch (IOException e) {
-            return "Error: Unable to write to file " + fileName + ": " + e.getMessage();
+            return "Error! unable to write to file " + fileName + ": " + e.getMessage();
         }
     }
 
-    // Method to execute "cat > file" for user input
+    // "cat > file" method
     public String catToFile(String fileName) {
         File file = new File(fileName);
         try (FileWriter writer = new FileWriter(file);
@@ -90,27 +88,26 @@ public class CLI {
             }
             return "Success: Input saved to " + fileName;
         } catch (IOException e) {
-            return "Error: Unable to write to file " + fileName + ": " + e.getMessage();
+            return "Error: unable to write to file " + fileName + ": " + e.getMessage();
         }
     }
 
-    // Method to execute the append command ">>"
+    //">>" method
     public String appendToFile(String command, String fileName) {
         File file = new File(fileName);
         try (FileWriter writer = new FileWriter(file, true)) {  // 'true' enables appending mode
             writer.write(command + System.lineSeparator());
-            return "Success: Output appended to " + fileName;
+            return "Success!" + fileName;
         } catch (IOException e) {
-            return "Error: Unable to write to file " + fileName + ": " + e.getMessage();
+            return "Error! unable to write to file " + fileName + ": " + e.getMessage();
         }
     }
 
     public static void main(String[] args) {
-        // Example command; replace with dynamic input as needed
-        String commandLine = "echo Hello"; // Example command for Windows
+        String commandLine = "Hello world"; // Example command for Windows
         executePipedCommands(commandLine);
     }
-
+//"pip" method
     public static void executePipedCommands(String commandLine) {
         String[] commands = commandLine.split("\\|"); // Split on pipe
 
@@ -118,14 +115,12 @@ public class CLI {
             ProcessBuilder processBuilder = new ProcessBuilder(commands[0].trim().split(" "));
             Process process = processBuilder.start();
 
-            // Print output from the command
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
             while ((line = reader.readLine()) != null) {
                 System.out.println(line);
             }
 
-            // Wait for the process to complete
             process.waitFor();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
