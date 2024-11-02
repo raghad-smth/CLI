@@ -23,6 +23,7 @@ How to Run the Project
 
 
 Testing with JUnit
+------------------
 
 Each function within the CLI class is rigorously tested using JUnit.
 To run the tests:
