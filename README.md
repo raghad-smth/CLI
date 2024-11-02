@@ -1,5 +1,5 @@
-                                                Command Line Interpreter (CLI) Project
-                                                ---------------------------------------
+ Command Line Interpreter (CLI) Project
+---------------------------------------
 This project is a simulation of a Command Line Interpreter (CLI) built using Java. The CLI supports Linux command syntax and features JUnit testing for each implemented function.
 
 Project Structure
